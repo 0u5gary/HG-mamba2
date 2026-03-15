@@ -1,0 +1,64 @@
+diff --git a/avhubert/hubert.py b/avhubert/hubert.py
+index 93b6f44..ea75201 100644
+--- a/avhubert/hubert.py
++++ b/avhubert/hubert.py
+@@ -73,6 +73,25 @@ class AVHubertConfig(FairseqDataclass):
+             "has layer norms in every block (meant to use with normalize=True)"
+         },
+     )
++    # 在 class AVHubertConfig 裡面加入：
++    layer_type: str = field(
++        default="transformer", metadata={"help": "layer type, one of transformer, convolution"}
++    )
++    # 在 class AVHubertConfig 裡面加入：
++    required_seq_len_multiple: int = field(
++        default=1, metadata={"help": "pad the input sequence length to a multiple of this value"}
++    )
++
++    # 在 class AVHubertConfig 裡面加入：
++
++    checkpoint_activations: bool = field(
++        default=False, metadata={"help": "recompute activations and save memory for extra compute"}
++    )
++
++    offload_activations: bool = field(
++        default=False, metadata={"help": "checkpoint activations at each layer, which saves GPU memory."}
++    )
++
+     encoder_layers: int = field(
+         default=12, metadata={"help": "num encoder layers in the transformer"}
+     )
+diff --git a/avhubert/hubert_asr.py b/avhubert/hubert_asr.py
+index f493897..3291c61 100644
+--- a/avhubert/hubert_asr.py
++++ b/avhubert/hubert_asr.py
+@@ -38,6 +38,14 @@ class AVHubertAsrConfig(FairseqDataclass):
+     w2v_path: str = field(
+         default=MISSING, metadata={"help": "path to hubert model"}
+     )
++
++    encoder_embed_dim: int = field(
++        default=768, metadata={"help": "encoder embedding dimension"}
++    )
++    decoder_embed_dim: int = field(
++        default=768, metadata={"help": "decoder embedding dimension"}
++    )
++
+     no_pretrained_weights: bool = field(
+         default=False,
+         metadata={"help": "if true, does not load pretrained weights"},
+diff --git a/avhubert/hubert_pretraining.py b/avhubert/hubert_pretraining.py
+index 9815dfb..8e898b1 100644
+--- a/avhubert/hubert_pretraining.py
++++ b/avhubert/hubert_pretraining.py
+@@ -64,6 +64,10 @@ class AVHubertPretrainingConfig(FairseqDataclass):
+     data: str = field(
+         default=MISSING, metadata={"help": "path to data directory"}
+     )
++    # 在 AVHubertPretrainingConfig class 裡面加入：
++    input_modality: str = field(
++        default="video", metadata={"help": "input modality (video/audio/both)"}
++    )
+     labels: List[str] = field(
+         default_factory=lambda: ["ltr"],
+         metadata={

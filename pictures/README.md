@@ -1,0 +1,5 @@
+architecture.pdf
+    Architecture of the proposed HG-Mamba. Modality-specific encoders extract audio and visual features ($\mathbf{F}_a, \mathbf{F}_v$), which are position-encoded and structured into a heterogeneous graph $\mathbf{H}^{(0)}$. A ResGCN with a depth of 4 captures cross-modal interactions, outputting $\mathbf{H}_a$ to a unidirectional Mamba block for global temporal modeling.   Finally, 3 stacked FCN layers generate a mask for magnitude refinement. The refined magnitude is then integrated with the original noisy phase and reconstructed via ISTFT.
+
+graph.pdf
+    The proposed heterogeneous graph centered at the current frame $t$. Red and blue arrows denote intra-modal temporal connections, while black arrows indicate asymmetric cross-modal interactions: bidirectional at frame $t$ and unidirectional from the visual context.
